@@ -13,12 +13,12 @@ public class UserService {
 
     public User createUser(UserSignupDto userSignupDto) {
         if (userRepository.existsByEmail(userSignupDto.email())) {
-            throw new RuntimeException("User with email " + userSignupDto.email() + " already exists");
+            throw new RuntimeException("User with email " + userSignupDto.email() + " already exists"); // TODO: Implement specific error
         }
 
         // Check if phone number already exists
         if (userRepository.existsByPhoneNumber(userSignupDto.phoneNumber())) {
-            throw new RuntimeException("User with phone number " + userSignupDto.phoneNumber() + " already exists");
+            throw new RuntimeException("User with phone number " + userSignupDto.phoneNumber() + " already exists"); // TODO: Implement specific error
 
         }
 
