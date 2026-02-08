@@ -1,6 +1,5 @@
 package com.tejas.splitspend.group;
 
-import com.tejas.splitspend.group.MemberRole.MemberRole;
 import com.tejas.splitspend.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;

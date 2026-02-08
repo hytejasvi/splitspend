@@ -1,4 +1,4 @@
-package com.tejas.splitspend.group.MemberRole;
+package com.tejas.splitspend.group;
 
 public enum MemberRole {
     ADMIN,
