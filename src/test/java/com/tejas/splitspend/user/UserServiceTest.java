@@ -1,5 +1,7 @@
 package com.tejas.splitspend.user;
 
+import com.tejas.splitspend.user.exceptions.EmailAlreadyExistsException;
+import com.tejas.splitspend.user.exceptions.PhoneNumberAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,7 +55,7 @@ class UserServiceTest {
 
         when(userRepository.existsByEmail(dto.email())).thenReturn(true);
 
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(EmailAlreadyExistsException.class, () -> {
             userService.createUser(dto);
         });
 
@@ -73,7 +75,7 @@ class UserServiceTest {
         when(userRepository.existsByEmail(dto.email())).thenReturn(false);
         when(userRepository.existsByPhoneNumber(dto.phoneNumber())).thenReturn(true);
 
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(PhoneNumberAlreadyExistsException.class, () -> {
             userService.createUser(dto);
         });
 
