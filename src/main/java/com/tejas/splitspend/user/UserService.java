@@ -1,11 +1,13 @@
 package com.tejas.splitspend.user;
 
+import com.tejas.splitspend.user.exceptions.EmailAlreadyExistsException;
+import com.tejas.splitspend.user.exceptions.PhoneNumberAlreadyExistsException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -13,13 +15,12 @@ public class UserService {
 
     public User createUser(UserSignupDto userSignupDto) {
         if (userRepository.existsByEmail(userSignupDto.email())) {
-            throw new RuntimeException("User with email " + userSignupDto.email() + " already exists"); // TODO: Implement specific error
+            throw new EmailAlreadyExistsException("User with email " + userSignupDto.email() + " already exists");
         }
 
         // Check if phone number already exists
         if (userRepository.existsByPhoneNumber(userSignupDto.phoneNumber())) {
-            throw new RuntimeException("User with phone number " + userSignupDto.phoneNumber() + " already exists"); // TODO: Implement specific error
-
+            throw new PhoneNumberAlreadyExistsException("User with phone number " + userSignupDto.phoneNumber() + " already exists");
         }
 
         User user = mapDtoToEntity(userSignupDto);
