@@ -1,7 +1,9 @@
 package com.tejas.splitspend.user;
 
 import com.tejas.splitspend.user.exceptions.EmailAlreadyExistsException;
+import com.tejas.splitspend.user.exceptions.InvalidCredentialsException;
 import com.tejas.splitspend.user.exceptions.PhoneNumberAlreadyExistsException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -9,8 +11,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User createUser(UserSignupDto userSignupDto) {
@@ -27,13 +32,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public boolean checkIfUserExists(String emailId) {
-        return userRepository.existsByEmail(emailId);
+    public User userLogin(LoginRequestDto loginRequestDto) {
+        User user = userRepository.findByEmail(loginRequestDto.email())
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
+        if (!passwordEncoder.matches(loginRequestDto.password(), user.getPassword())) {
+            throw new InvalidCredentialsException(
+                    "Invalid email or password"
+            );
+        }
+        return user;
     }
 
     private String hashPassword(String plainPassword) {
-        // BCrypt hashing
-        return plainPassword; // TODO: Implement BCrypt
+        return passwordEncoder.encode(plainPassword);
     }
 
     private User mapDtoToEntity(UserSignupDto signupDto) {

@@ -2,6 +2,7 @@ package com.tejas.splitspend.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tejas.splitspend.common.GlobalExceptionHandler;
+import com.tejas.splitspend.common.SecurityConfig;
 import com.tejas.splitspend.user.exceptions.EmailAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -18,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
-@Import(GlobalExceptionHandler.class)
+@Import({GlobalExceptionHandler.class, SecurityConfig.class})
 class UserControllerTest {
 
     @Autowired
@@ -29,6 +31,9 @@ class UserControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
 
     @Test
     void signup_Returns500_WhenUnexpectedExceptionOccurs() throws Exception {

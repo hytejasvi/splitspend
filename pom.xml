@@ -66,6 +66,12 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- Spring Security (for BCrypt password encoding only) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
