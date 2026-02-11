@@ -52,6 +52,7 @@ class UserControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.userId").exists())
                 .andExpect(jsonPath("$.name").value("Tejas"))
+                .andExpect(jsonPath("$.createdAt").exists())
                 .andExpect(jsonPath("$.email").value("tejas11@example.com"));
     }
 
@@ -110,5 +111,75 @@ class UserControllerIntegrationTest {
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.message").value("Validation Failed"))
                 .andExpect(jsonPath("$.errors").exists());
+    }
+
+    @Test
+    void login_Success() throws Exception {
+        UserSignupDto signupDto = new UserSignupDto(
+                "Tejas",
+                "login@example.com",
+                "9876543211",
+                "password123"
+        );
+
+        mockMvc.perform(post("/v1/user/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(signupDto)))
+                .andExpect(status().isCreated());
+
+        LoginRequestDto loginDto = new LoginRequestDto(
+                "login@example.com",
+                "password123"
+        );
+
+        mockMvc.perform(post("/v1/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").exists())
+                .andExpect(jsonPath("$.email").value("login@example.com"))
+                .andExpect(jsonPath("$.createdAt").exists())
+                .andExpect(jsonPath("$.name").value("Tejas"));
+    }
+
+    @Test
+    void login_Returns401_WhenEmailNotFound() throws Exception {
+        LoginRequestDto loginDto = new LoginRequestDto(
+                "notfound@example.com",
+                "password123"
+        );
+
+        mockMvc.perform(post("/v1/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDto)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status").value(401))
+                .andExpect(jsonPath("$.message").value("Invalid email or password"));
+    }
+
+    @Test
+    void login_Returns401_WhenPasswordIncorrect() throws Exception {
+        UserSignupDto signupDto = new UserSignupDto(
+                "Tejas",
+                "wrongpass@example.com",
+                "9876543212",
+                "password123"
+        );
+
+        mockMvc.perform(post("/v1/user/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(signupDto)))
+                .andExpect(status().isCreated());
+
+        LoginRequestDto loginDto = new LoginRequestDto(
+                "wrongpass@example.com",
+                "wrongpassword"
+        );
+
+        mockMvc.perform(post("/v1/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDto)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status").value(401));
     }
 }
