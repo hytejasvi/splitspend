@@ -1,4 +1,4 @@
-package com.tejas.splitspend.user;
+package com.tejas.splitspend.user.dto;
 
 import jakarta.validation.constraints.*;
 

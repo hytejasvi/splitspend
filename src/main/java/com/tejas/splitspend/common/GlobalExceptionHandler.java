@@ -1,8 +1,10 @@
 package com.tejas.splitspend.common;
 
+import com.tejas.splitspend.group.exceptions.GroupMemberDuplicateException;
+import com.tejas.splitspend.group.exceptions.GroupNotFoundException;
 import com.tejas.splitspend.user.exceptions.EmailAlreadyExistsException;
-import com.tejas.splitspend.user.exceptions.PhoneNumberAlreadyExistsException;
 import com.tejas.splitspend.user.exceptions.InvalidCredentialsException;
+import com.tejas.splitspend.user.exceptions.PhoneNumberAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -90,6 +92,34 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(GroupNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleGroupNotFound(
+            GroupNotFoundException ex) {
+
+        ErrorResponse response = new ErrorResponse(
+                404,
+                ex.getMessage(),
+                null,
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(GroupMemberDuplicateException.class)
+    public ResponseEntity<ErrorResponse> handleGroupMemberDuplicateException(
+            GroupMemberDuplicateException ex) {
+
+        ErrorResponse response = new ErrorResponse(
+                400,
+                ex.getMessage(),
+                null,
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     /**

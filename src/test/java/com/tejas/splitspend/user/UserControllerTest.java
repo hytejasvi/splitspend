@@ -3,6 +3,7 @@ package com.tejas.splitspend.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tejas.splitspend.common.GlobalExceptionHandler;
 import com.tejas.splitspend.common.SecurityConfig;
+import com.tejas.splitspend.user.dto.UserSignupDto;
 import com.tejas.splitspend.user.exceptions.EmailAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

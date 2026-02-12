@@ -1,4 +1,6 @@
-package com.tejas.splitspend.user;
+package com.tejas.splitspend.user.dto;
+
+import com.tejas.splitspend.user.User;
 
 import java.time.ZonedDateTime;
 
