@@ -1,5 +1,7 @@
 package com.tejas.splitspend.user;
 
+import com.tejas.splitspend.user.dto.LoginRequestDto;
+import com.tejas.splitspend.user.dto.UserSignupDto;
 import com.tejas.splitspend.user.exceptions.EmailAlreadyExistsException;
 import com.tejas.splitspend.user.exceptions.InvalidCredentialsException;
 import com.tejas.splitspend.user.exceptions.PhoneNumberAlreadyExistsException;

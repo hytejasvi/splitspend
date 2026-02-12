@@ -76,6 +76,18 @@ public class Group {
         this.createdById = createdById;
     }
 
+    @Override
+    public String toString() {
+        return "Group{" +
+                "groupId=" + groupId +
+                ", members=" + members +
+                ", groupName='" + groupName + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", createdById=" + createdById +
+                '}';
+    }
+
     public Group() {
     }
 
