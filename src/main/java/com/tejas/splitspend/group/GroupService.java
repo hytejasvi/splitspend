@@ -56,9 +56,17 @@ public class GroupService {
     /*
      * Get all groups (temporary - will filter by user with JWT).
      */
-    public List<Group> getAllGroups() {
-        log.debug("Fetching all groups");
-        return groupRepository.findAll();
+    public List<Group> getUserGroups(Long userId) {
+        log.debug("Fetching groups for user ID: {}", userId);
+
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException(
+                    "User with ID " + userId + " not found"
+            );
+        }
+        List<GroupMember> memberships = groupMemberRepository.findByUser_UserId(userId);
+
+        return memberships.stream().map(GroupMember::getGroup).toList();
     }
 
     /**
