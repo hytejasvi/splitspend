@@ -33,14 +33,18 @@ public class GroupController {
     }
 
     /**
-     * Get all groups (temporary - will filter by authenticated user with JWT).
+     * Get all groups that a user belongs to.
+     *
+     * @param userId User ID (query parameter)
+     * @return List of user's groups
      */
     @GetMapping
-    public ResponseEntity<List<GroupResponseDto>> getAllGroups() {
-        List<Group> groups = groupService.getAllGroups();
+    public ResponseEntity<List<GroupResponseDto>> getUserGroups(@RequestParam Long userId) {
+        List<Group> groups = groupService.getUserGroups(userId);
         List<GroupResponseDto> response = groups.stream()
                 .map(GroupResponseDto::from)
                 .toList();
+
         return ResponseEntity.ok(response);
     }
 

@@ -5,6 +5,7 @@ import com.tejas.splitspend.group.exceptions.GroupNotFoundException;
 import com.tejas.splitspend.user.exceptions.EmailAlreadyExistsException;
 import com.tejas.splitspend.user.exceptions.InvalidCredentialsException;
 import com.tejas.splitspend.user.exceptions.PhoneNumberAlreadyExistsException;
+import com.tejas.splitspend.user.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -94,6 +95,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(
+            UserNotFoundException ex) {
+
+        ErrorResponse response = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                null,
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
     @ExceptionHandler(GroupNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleGroupNotFound(
             GroupNotFoundException ex) {
@@ -119,7 +134,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     /**
